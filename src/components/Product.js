@@ -1,24 +1,21 @@
 import React, { useState } from 'react'
-import Button from './Button'
 import Rating from './Rating'
 
 const Product = (props) => {
 
     const [viewAddCart, setViewAddCart] = useState(true);
-    const [buttonName, setButtonName] = useState("Add to Cart")
-    const [buttonClass,setButtonClass] = useState("btn-outline-dark")
+    const [cartItems, setCartItems] = useState([]);
 
-    const onClickHandler = (event) => {
-        if (viewAddCart) {
-            setButtonName("Remove from Cart")
-            setViewAddCart(!viewAddCart);
-            setButtonClass("btn-outline-danger");
-        }else{
-            setButtonName("Add to Cart")
-            setViewAddCart(!viewAddCart);
-            setButtonClass("btn-outline-dark");
-        }
-
+    const addCart = (item) => {
+        cartItems.push(item);
+        setViewAddCart(!viewAddCart);
+        props.add(item);
+    }
+    const removeCart = (item) => {
+        setViewAddCart(!viewAddCart);
+        setCartItems(cartItems.filter(pItem => pItem.name !== item.name && pItem.price !== item.price))
+        console.log(cartItems);
+        props.remove(item);
     }
 
     return (
@@ -40,7 +37,11 @@ const Product = (props) => {
 
                         {/* <!-- Product reviews--> */}
                         <Rating name={props.productType.name} />
-
+                        {/* {
+                           
+                            props.productType.name==="Special Item" || props.productType.name==="Popular Item"?
+                            <Rating name={props.productType.name} />:""
+                        } */}
                         {/* <!-- Product price--> */}
 
                         {props.productType.name === "Special Item" || props.productType.name === "Sale Item" ? <span className="text-muted text-decoration-line-through">${props.productType.minPrice}</span> : ""}
@@ -51,8 +52,14 @@ const Product = (props) => {
 
                 {/* <!-- Product actions--> */}
                 <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                    <Button function={onClickHandler} name={props.productType.name} buttonText={buttonName} outline={buttonClass}/>
+                    {
+                        props.productType.name === "Fancy Product" ?
+                            <div className="text-center"><button className="btn btn-outline-dark mt-auto">View Options</button></div> :
 
+                            viewAddCart ?
+                                <div className="text-center"><button className="btn btn-outline-dark" onClick={() => addCart({ name: props.productType.name, price: props.productType.maxPrice })}>Add to Cart</button></div> :
+                                <div className="text-center"><button className="btn btn-outline-danger" onClick={() => removeCart({ name: props.productType.name, price: props.productType.maxPrice })}>Remove from Cart</button></div>
+                    }
                 </div>
             </div>
         </div>

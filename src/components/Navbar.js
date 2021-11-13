@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
+import CartItems from './CartItems'
 
-const Navbar = () => {
+const Navbar = (props) => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container px-4 px-lg-5">
@@ -22,11 +23,14 @@ const Navbar = () => {
                         </li>
                     </ul>
                     <form className="d-flex">
-                        <button className="btn btn-outline-dark" type="submit">
-                            <i className="bi-cart-fill me-1"></i>
-                            Cart
-                            <span className="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>
+                        <div>
+                            <button className="btn btn-outline-dark" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <i className="bi-cart-fill me-1"></i>
+                                Cart
+                                <span className="badge bg-dark text-white ms-1 rounded-pill">{props.count}</span>
+                            </button>
+                            <CartItems items={props.items} total={props.total} />
+                        </div>
                     </form>
                 </div>
             </div>
